@@ -1,0 +1,20 @@
+name: Sync Fork
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天北京时间 08:00
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Sync Upstream
+        uses: wei/pull@v3
+        with:
+          upstream_repository: panghu11033/thsdk
+          upstream_branch: main
+          downstream_branch: main
+          token: ${{ secrets.GITHUB_TOKEN }}
