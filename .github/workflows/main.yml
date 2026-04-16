@@ -1,20 +1,17 @@
+# .github/workflows/sync.yml
 name: Sync Fork
-on:
-  schedule:
-    - cron: '0 0 * * *' # 每天北京时间 08:00
-  workflow_dispatch: # 允许手动触发
 
+on:
+  push: # push 时触发, 主要是为了测试配置有没有问题
+  schedule:
+    - cron: '* 3 * * *' # 每3小时触发, 对于一些更新不那么频繁的项目可以设置为每天一次, 低碳一点
 jobs:
-  sync:
+  repo-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Sync Upstream
-        uses: wei/pull@v3
+      - uses: TG908/fork-sync@v1.6.3
         with:
-          upstream_repository: panghu11033/thsdk
-          upstream_branch: main
-          downstream_branch: main
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          owner: panghu11033 # fork 的上游仓库 user
+          head: main # fork 的上游仓库 branch
+          base: main # 本地仓库 branch
